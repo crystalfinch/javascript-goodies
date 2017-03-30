@@ -1,0 +1,109 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Closures</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+		body {
+			font-family: "Helvetica", Arial, sans-serif;
+			line-height: 1.4em;
+			padding: 40px 20px;
+		}
+		h1 {
+			margin-bottom: 40px;
+		}
+		hr {
+			border-top: 1px solid #ddd;
+			border-bottom: 0;
+			margin: 40px 0;
+		}
+		a {
+			color: #333;
+			text-decoration: none;
+		}
+		a:hover {
+			color: #000;
+			text-decoration: none;
+		}
+		form input,
+		button {
+			border: 1px solid #ddd;
+			font-size: 16px;
+			padding: 10px;
+			-webkit-appearance: none;
+		}
+		form input[type="submit"],
+		button {
+			background-color: #ddd;
+			border-radius: 3px;
+			padding: 10px 16px;
+		}
+		#message {
+			background-color: #eee;
+			border-radius: 3px;
+			display: none;
+			padding: 10px 16px;
+		}
+		#message.success {
+			background-color: #83e681;
+			display: inline-block;
+		}
+		#message.warning {
+			background-color: #f59364;
+			display: inline-block;
+		}
+		#order {
+			color: #555;
+			font-size: 16px;
+			margin-bottom: 100px;
+		}
+		#order p {
+			background-color: #eee;
+			float: left;
+			line-height: 1em;
+			margin: 0 10px 20px 0;
+			padding: 40px 25px 20px;
+			text-align: center;
+			width: 300px;
+		}
+		.fa {
+			display: block;
+			font-size: 50px;
+			line-height: 70px;
+		}
+		.fa.fa-smile-o {
+			color: #5bc359;
+		}
+		.fa.fa-meh-o {
+			color: #caa492;
+		}
+		.fa.fa-frown-o {
+			color: #d25e5e;
+		}
+	</style>
+</head>
+<body>
+	<h1>Closures</h1>
+	<h2>Example 1: Data Privacy</h2>
+	<p>Enter the magic word and click the button. The script checks if the value is correct using a JavaScript closure.</p>
+	<h3>What&#39;s the magic word?</h3>
+	<form action="">
+		<input type="text" name="word" id="word">
+		<input type="submit" value="Check!">
+	</form>
+	<div id="message"></div>
+	<hr>
+	<h2>Example 2: Privileged Methods</h2>
+	<p>The first button lets you increase the number of donuts. The second lets you decrease the number of donuts. The third button resets the number to zero.</p>
+	<h3>How many donuts would you like?</h3>
+	<div id="order">
+		<p><strong>Total:</strong> You would like <span class="total"></span> <span class="fa"></span></p>
+		<button type="button" class="add">+ Add</button>
+		<button type="button" class="subtract">- Subtract</button>
+		<button type="button" class="reset">Reset</button>
+	</div>
+	<script src="closures.js" type="text/javascript"></script>
+</body>
+</html>
