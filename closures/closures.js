@@ -76,7 +76,7 @@
 		} else if(btn.className == "reset") {
 			donuts.resetCount();
 		}
-		if (typeof callback == "function") {
+		if (typeof callback === "function") {
 			callback();
 		} else {
 			throw new TypeError("Callback passed to handleDonutBtn is not a function");
