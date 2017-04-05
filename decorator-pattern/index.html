@@ -1,0 +1,188 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Decorator Pattern</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+		body {
+			font-family: "Helvetica", Arial, sans-serif;
+			line-height: 1.4em;
+			padding: 40px 20px;
+		}
+		a {
+			color: #333;
+			text-decoration: none;
+		}
+		a:hover {
+			color: #000;
+			text-decoration: none;
+		}
+		.fa {
+			color: #e06797;
+			display: block;
+			font-size: 50px;
+			line-height: 70px;
+			margin: 20px auto;
+			text-align: center;
+		}
+		#box {
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+			float: left;
+			width: 400px;
+		}
+		table {
+			border-collapse: collapse;
+			display: block;
+		}
+		table tr {
+			width: 100%;
+		}
+		table th,
+		table td {
+			border-top: 1px solid #ddd;
+			padding: 5px 10px;
+			text-align: left;
+		}
+		form {
+			background: #f1f1f1;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+			float: left;
+			margin-bottom: 50px;
+			padding: 20px 30px;
+			width: 450px;
+		}
+		form input,
+		button {
+			border: 1px solid #ddd;
+			font-size: 16px;
+			padding: 10px;
+		}
+		form input[type="submit"],
+		button {
+			background-color: #ddd;
+			border-radius: 3px;
+			margin-top: 15px;
+			padding: 10px 16px;
+			-webkit-appearance: none;
+		}
+		form label,
+		form fieldset legend {
+			font-weight: bold;
+		}
+		form fieldset input {
+			clear: left;
+		}
+		form fieldset label {
+			font-weight: normal;
+		}
+		form fieldset label:after {
+			clear: both;
+			content: "";
+			display: table;
+		}
+		form fieldset {
+			border: 1px solid #ddd;
+			float: left;
+			margin: 20px 0;
+			width: 40%;
+		}
+		form fieldset + fieldset {
+			clear: right;
+			margin-left: 6%;
+		}
+		form >div {
+			clear: left;
+			margin-bottom: 10px;
+		}
+		form .number-field label {
+			display: inline-block;
+			margin-right: 10px;
+			width: 80px;
+		}
+		form .number-field input {
+			width: 70px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Decorator Pattern</h1>
+	<p>Use the form to put together an order for a cake. The order total is calculated using JavaScript decorators.</p>
+
+	<div id="box">
+		<i class="fa fa-birthday-cake"></i>
+		<table id="charges"></table>
+	</div>
+
+	<form action="">
+		<div class="number-field">
+			<label for="tiers">Tiers</label>
+			<input type="text" name="tiers" value="1">
+		</div>
+		<div class="number-field">
+			<label for="candles">Candles</label>
+			<input type="text" name="candles" value="0">
+		</div>
+		<fieldset name="flavors">
+			<legend>Flavors</legend>
+			<input type="checkbox" name="chocolate" value="10">
+			<label for="chocolate">Chocolate</label>
+			<input type="checkbox" name="vanilla" value="7">
+			<label for="vanilla">Vanilla</label>
+			<input type="checkbox" name="lemon" value="11">
+			<label for="lemon">Lemon</label>
+			<input type="checkbox" name="carrot" value="8">
+			<label for="carrot">Carrot</label>
+			<input type="checkbox" name="marble" value="12">
+			<label for="marble">Marble</label>
+			<input type="checkbox" name="coconut" value="15">
+			<label for="coconut">Coconut</label>
+			<input type="checkbox" name="redvelvet" value="14">
+			<label for="redvelvet">Red Velvet</label>
+			<input type="checkbox" name="cinnamon" value="10">
+			<label for="cinnamon">Cinnamon</label>
+			</div>
+		</fieldset>
+		<fieldset name="flowers">
+			<legend>Flowers</legend>
+			<div>
+				<input type="checkbox" name="roses" value="25">
+				<label for="roses">Roses</label>
+			</div>
+			<div>
+				<input type="checkbox" name="daisies" value="15">
+				<label for="daisies">Daisies</label>
+			</div>
+			<div>
+				<input type="checkbox" name="orchids" value="20">
+				<label for="orchids">Orchids</label>
+			</div>
+			<div>
+				<input type="checkbox" name="carnations" value="14">
+				<label for="carnations">Carnations</label>
+			</div>
+			<div>
+				<input type="checkbox" name="marigolds" value="16">
+				<label for="marigolds">Marigolds</label>
+			</div>
+		</fieldset>
+		<div>
+			<input type="checkbox" name="sprinkles" value="Sprinkles">
+			<label for="sprinkles">Sprinkles</label>
+		</div>
+		<div>
+			<input type="checkbox" name="delivery" value="Delivery">
+			<label for="delivery">Delivery</label>
+		</div>
+		<input type="hidden" name="tax" value="0.8">
+		<input type="submit" value="Submit">
+	</form>
+
+	<script src="decorator-pattern.js" type="text/javascript"></script>
+</body>
+</html>
