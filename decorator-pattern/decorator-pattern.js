@@ -1,15 +1,41 @@
 function Cake() { // constructor with defaults
+	this.prices = {
+		"tiers": 20,
+		"candles": 0.5,
+		"flavors": {
+			"Vanilla": 7,
+			"Chocolate": 10,
+			"Lemon": 11,
+			"Carrot": 8,
+			"Marble": 12,
+			"Coconut": 15,
+			"Red Velvet": 14,
+			"Cinnamon": 10
+		},
+		"flowers": {
+			"Roses": 25,
+			"Daisies": 15,
+			"Orchids": 20,
+			"Carnations": 14,
+			"Marigolds": 16
+		},
+		"sprinkles": 4,
+		"delivery": 20,
+		"stateTax": 0.0725, // California sales tax is currently 7.25%
+		"localTax": 0.085 // Santa Cruz sales tax is currently 8.5%
+	};
+	this.charges = {};
 	this.price = function() {
-		return 36;
+		return 0;
 	};
 	this.tiers = function() {
-		return 1;
+		return 1; // defaults to one tier
 	};
 	this.candles = function() {
 		return 0;
 	};
 	this.flavors = function() {
-		return ["vanilla"];
+		return ["Vanilla"];
 	};
 	this.flowers = function() {
 		return [];
@@ -20,195 +46,215 @@ function Cake() { // constructor with defaults
 	this.delivery = function() {
 		return false;
 	};
-	this.stateTax = function() {
-		return 0;
-	};
-	this.localTax = function() {
-		return 0;
-	};
-}
-
-function displayCharges(id, cake) { /* TODO: Clean up the templates below */
-	var box = document.getElementById(id),
-		tiers = cake.tiers(),
-		candles = cake.candles(),
-		flavors = cake.flavors(),
-		flowers = cake.flowers(),
-		sprinkles = cake.sprinkles(),
-		delivery = cake.delivery(),
-		stateTax = cake.stateTax(),
-		localTax = cake.localTax(),
-		price = cake.price();
-
-	var flavorsTemplate = flavors.map(function(flavor) {
-		return flavor.name;
-	}).join(", ");
-
-	var flowersTemplate = flowers.map(function(flower) {
-		return flower.name;
-	}).join(", ");
-
-	var template = '<tbody>' +
-						'<tr>' +
-							'<th>Tiers</th>' +
-							'<td>' + tiers + '</td>' +
-						'</tr>' +
-						'<tr>' +
-							'<th>Candles</th>' +
-							'<td>' + candles + '</td>' +
-						'</tr>';
-
-	template +=			'<tr>' +
-							'<th>Flavors</th>' +
-							'<td>' + flavorsTemplate + '</td>' +
-						'</tr>' +
-						'<tr>' +
-							'<th>Flowers</th>' +
-							'<td>' + flowersTemplate + '</td>' +
-						'</tr>';
-
-	if (sprinkles) {
-		template += '<tr>' +
-						'<th>Sprinkles</th>' +
-						'<td>$4.00</td>' +
-					'</tr>';
-	}
-
-	if (delivery) {
-		template += '<tr>' +
-						'<th>Delivery</th>' +
-						'<td>$20.00</td>' +
-					'</tr>';
-	}
-
-	template +=		'<tr>' +
-						'<th>State Tax</th>' +
-						'<td>' + stateTax + '</td>' +
-					'</tr>' +
-					'<tr>' +
-						'<th>Local Tax</th>' +
-						'<td>' + localTax + '</td>' +
-					'</tr>' +
-					'<tr>' +
-						'<th>Total</th>' +
-						'<td>' + price + '</td>' +
-					'</tr>' +
-			   '</tbody>';
-
-	box.innerHTML = template;
 }
 
 function rounded(x) {
 	return Math.round(x * 100)/100;
 }
 
-/* TODO: Create formatPrice & capitalize helper functions */
+function formatPrice(dollars) {
+	var str = "$" + dollars.toFixed(2);
+	return str;
+}
 
 function chosenItems(arg) {
 	var items = Array.prototype.slice.call(arg);
-	var chosen = items.filter(function(item) {
+	var chosenItems = items.filter(function(item) { // array of inputs
 		if (item.checked) {
 			return item;
 		}
+	});
+	var chosen = chosenItems.map(function(item) { // array of values from array of inputs
+		return item.value;
 	});
 	return chosen;
 }
 
 function Tiers(cake, num) {
-	var c = cake.price();
-	var tiersCost = 18 * num; // $18 per tier
+	var p = cake.price();
+	var tiersCost = rounded((cake.prices.tiers * num));
 	cake.tiers = function() {
 		return num;
 	};
+	cake.charges.tiers = tiersCost;
 	cake.price = function() {
-		return c + rounded(tiersCost);
+		return p + tiersCost;
 	};
 }
 
 function Candles(cake, num) {
-	var c = cake.price();
-	var candleCost = 0.5; // $0.50 per candle
+	var p = cake.price();
+	var candlesCost = rounded((cake.prices.candles * num));
 	cake.candles = function() {
 		return num;
 	};
+	cake.charges.candles = candlesCost;
 	cake.price = function() {
-		return c + rounded((candleCost * num));
+		return p + candlesCost;
 	};
 }
 
 function Flavors(cake, flavors) {
-	var c = cake.price();
+	var p = cake.price();
 	var flavorsCost = flavors.reduce(function(sum, flavor) {
-		return sum + parseInt(flavor.defaultValue);
+		return sum + cake.prices.flavors[flavor];
 	}, 0);
 	cake.flavors = function() {
 		return flavors;
 	};
+	cake.charges.flavors = flavorsCost;
 	cake.price = function() {
-		return c + flavorsCost;
+		return p + flavorsCost;
 	};
 }
 
-function Flowers(cake, flwrs) {
-	var c = cake.price();
-	var flowers = Array.prototype.slice.call(flwrs);
+function Flowers(cake, flowers) {
+	var p = cake.price();
 	var flowersCost = flowers.reduce(function(sum, flower) {
-		if (flower.checked) {
-			return sum + parseInt(flower.defaultValue);
-		}
-		return sum;
+		return sum + cake.prices.flowers[flower];
 	}, 0);
 	cake.flowers = function() {
 		return flowers;
 	};
+	cake.charges.flowers = flowersCost;
 	cake.price = function() {
-		return c + flowersCost;
+		return p + flowersCost;
 	};
 }
 
 function Sprinkles(cake) {
-	var c = cake.price();
+	var p = cake.price();
+	var sprinklesCost = cake.prices.sprinkles;
 	cake.sprinkles = function() {
 		return true;
 	};
+	cake.charges.sprinkles = sprinklesCost;
 	cake.price = function() {
-		return c + 4; // $4 for sprinkles
+		return p + sprinklesCost;
 	};
 }
 
 function Delivery(cake) {
-	var c = cake.price();
+	var p = cake.price();
+	var deliveryCost = cake.prices.delivery;
 	cake.delivery = function() {
 		return true;
 	};
+	cake.charges.delivery = deliveryCost;
 	cake.price = function() {
-		return c + 20; // $20 for delivery
+		return p + deliveryCost;
 	};
 }
 
 function StateTax(cake) {
-	var c = cake.price();
-	var tax = rounded(c * 0.0725); // California sales tax is currently 7.25%
-	cake.stateTax = function() {
-		return tax;
-	};
+	var p = cake.price();
+	var tax = rounded((p * cake.prices.stateTax));
+	cake.charges.stateTax = tax;
 	cake.price = function() {
-		return c + tax;
+		return rounded((p + tax));
 	};
 }
 
 function LocalTax(cake) {
-	var c = cake.price();
-	var tax = rounded(c * 0.085); // Santa Cruz sales tax is currently 8.5%
-	cake.localTax = function() {
-		return tax;
-	};
+	var p = cake.price();
+	var tax = rounded((p * cake.prices.localTax));
+	cake.charges.localTax = tax;
 	cake.price = function() {
-		return c + tax;
+		return rounded((p + tax));
 	};
 }
 
 var ck = new Cake(); // instance of the Cake constructor
+
+function displayCharges(selector, cake) {
+	var table = document.querySelector(selector),
+		tiers = cake.tiers(),
+		candles = cake.candles(),
+		flavors = cake.flavors(),
+		flowers = cake.flowers(),
+		sprinkles = cake.sprinkles(),
+		delivery = cake.delivery(),
+		stateTax = cake.charges.stateTax,
+		localTax = cake.charges.localTax,
+		price = cake.price(),
+		template = '';
+
+	template += '<thead>' +
+					'<tr>' +
+						'<th colspan="2"><h2>Your Cake Order</h2></th>' +
+					'</tr>' +
+				'</thead>' +
+				'<tbody>';
+
+	template += '<tr class="first">' +
+					'<th>Item</th>' +
+					'<th>Price</th>' +
+				'</tr>';
+
+	template += '<tr>' +
+					'<th>Tiers <span>' + tiers +'</span></th>' +
+					'<td>' + formatPrice(cake.charges.tiers) + '</td>' +
+				'</tr>';
+
+	if (candles > 0) {
+		template += '<tr>' +
+						'<th>Candles<span>' + candles +'</span></th>' +
+						'<td>' + formatPrice(cake.charges.candles) + '</td>' +
+					'</tr>';
+	}
+
+	var flavorsString = flavors.join(", ");
+	template += '<tr>' +
+					'<th>' +
+						'Flavors' + '<span>' + flavorsString + '</span>' +
+					'</th>' +
+					'<td>' +
+						formatPrice(cake.charges.flavors) +
+					'</td>' +
+				'</tr>';
+
+	if (flowers.length > 0) {
+		var flowersString = flowers.join(", ");
+		template += '<tr>' +
+						'<th>' +
+							'Flowers' + '<span>' + flowersString + '</span>' +
+						'</th>' +
+						'<td>' +
+							formatPrice(cake.charges.flowers) +
+						'</td>' +
+					'</tr>';
+	}
+
+	if (sprinkles) {
+		template += '<tr>' +
+						'<th>Sprinkles</th>' +
+						'<td>' + formatPrice(cake.charges.sprinkles) +'</td>' +
+					'</tr>';
+	}
+
+	if (delivery) {
+		template += '<tr>' +
+						'<th>Delivery</th>' +
+						'<td>' + formatPrice(cake.charges.delivery) +'</td>' +
+					'</tr>';
+	}
+
+	template +=		'<tr>' +
+						'<th>State Tax <span>(' + rounded(cake.prices.stateTax) +'%)</span></th>' +
+						'<td>' + formatPrice(stateTax) + '</td>' +
+					'</tr>' +
+					'<tr>' +
+						'<th>Local Tax <span>(' + rounded(cake.prices.localTax) +'%)</span></th>' +
+						'<td>' + formatPrice(localTax) + '</td>' +
+					'</tr>' +
+					'<tr class="last">' +
+						'<th>Total</th>' +
+						'<td><strong>' + formatPrice(price) + '</strong></td>' +
+					'</tr>' +
+			   '</tbody>';
+
+	table.innerHTML = template;
+}
 
 function handleForm(e) {
 	var tiers = Number(e.target.tiers.value),
@@ -219,6 +265,7 @@ function handleForm(e) {
 		chosenFlavs = chosenItems(flavs),
 		flwrs = e.target.flowers.getElementsByTagName("input"),
 		chosenFlwrs = chosenItems(flwrs);
+
 	if (tiers > 0) {
 		Tiers(ck, tiers);
 	}
@@ -227,6 +274,9 @@ function handleForm(e) {
 	}
 	if (chosenFlavs.length) {
 		Flavors(ck, chosenFlavs);
+	} else {
+		Flavors(ck, ck.flavors()); // use default
+		e.target.flavors.elements.vanilla.checked = true; // check Vanilla
 	}
 	if (chosenFlwrs.length) {
 		Flowers(ck, chosenFlwrs);
@@ -240,11 +290,11 @@ function handleForm(e) {
 	StateTax(ck);
 	LocalTax(ck);
 
-	displayCharges("charges", ck);
+	displayCharges("#charges table", ck);
 	ck = new Cake(); // reset so you can make new order without page refresh
 }
 
-var form = document.querySelector("form");
+var form = document.getElementById("cakeForm");
 form.onsubmit = function(e) {
 	e.preventDefault();
 	handleForm(e);

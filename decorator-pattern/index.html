@@ -11,51 +11,94 @@
 			line-height: 1.4em;
 			padding: 40px 20px;
 		}
-		a {
-			color: #333;
-			text-decoration: none;
-		}
-		a:hover {
-			color: #000;
-			text-decoration: none;
-		}
 		.fa {
 			color: #e06797;
 			display: block;
 			font-size: 50px;
 			line-height: 70px;
-			margin: 20px auto;
+			margin: 0 auto 10px;
 			text-align: center;
 		}
-		#box {
+		.wrap {
+			margin: 50px auto;
+			max-width: 900px;
+		}
+		.wrap:after {
+			content: "";
+			clear: both;
+			display: table;
+		}
+		#charges {
 			-webkit-box-sizing: border-box;
 			-moz-box-sizing: border-box;
 			box-sizing: border-box;
 			float: left;
-			width: 400px;
+			padding: 0 40px;
+			width: 50%;
 		}
 		table {
 			border-collapse: collapse;
-			display: block;
-		}
-		table tr {
 			width: 100%;
 		}
 		table th,
 		table td {
-			border-top: 1px solid #ddd;
-			padding: 5px 10px;
+			padding: 10px 10px 8px;
+		}
+		table thead th {
+			text-align: center;
+		}
+		table thead th h2 {
+			font-weight: normal;
+			margin: 0 0 .5em;
+		}
+		table tbody th {
 			text-align: left;
+			width: 200px;
+		}
+		table tbody span {
+			color: #777;
+			display: block;
+			font-size: .7em;
+			font-weight: normal;
+		}
+		table td {
+			text-align: right;
+			vertical-align: top;
+		}
+		table td em {
+			color: #777;
+			display: block;
+			font-size: .8em;
+			margin: 0 auto;
+			max-width: 50%;
+			text-align: center;
+		}
+		table tr + tr th,
+		table tr + tr td {
+			border-top: 1px solid #ddd;
+		}
+		table tr.first th {
+			background-color: #f1f1f1;
+			color: #333;
+			font-size: .7em;
+			padding: 8px 10px 6px;
+			text-transform: uppercase;
+		}
+		table tr.first th + th {
+			text-align: right;
+		}
+		table tr.last th,
+		table tr.last td {
+			background-color: #f1f1f1;
 		}
 		form {
-			background: #f1f1f1;
+			background-color: #f1f1f1;
 			-webkit-box-sizing: border-box;
 			-moz-box-sizing: border-box;
 			box-sizing: border-box;
 			float: left;
-			margin-bottom: 50px;
-			padding: 20px 30px;
-			width: 450px;
+			padding: 20px 30px 50px;
+			width: 50%;
 		}
 		form input,
 		button {
@@ -114,74 +157,81 @@
 	<h1>Decorator Pattern</h1>
 	<p>Use the form to put together an order for a cake. The order total is calculated using JavaScript decorators.</p>
 
-	<div id="box">
-		<i class="fa fa-birthday-cake"></i>
-		<table id="charges"></table>
+	<div class="wrap">
+		<div id="charges">
+			<i class="fa fa-birthday-cake"></i>
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<em>Your order will be displayed here after you submit the form.</em>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<form id="cakeForm" action="">
+			<div class="number-field">
+				<label for="tiers">Tiers</label>
+				<input type="text" name="tiers" value="1">
+			</div>
+			<div class="number-field">
+				<label for="candles">Candles</label>
+				<input type="text" name="candles" value="0">
+			</div>
+			<fieldset name="flavors">
+				<legend>Flavors</legend>
+				<input type="checkbox" name="vanilla" value="Vanilla" checked>
+				<label for="vanilla">Vanilla</label>
+				<input type="checkbox" name="chocolate" value="Chocolate">
+				<label for="chocolate">Chocolate</label>
+				<input type="checkbox" name="lemon" value="Lemon">
+				<label for="lemon">Lemon</label>
+				<input type="checkbox" name="carrot" value="Carrot">
+				<label for="carrot">Carrot</label>
+				<input type="checkbox" name="marble" value="Marble">
+				<label for="marble">Marble</label>
+				<input type="checkbox" name="coconut" value="Coconut">
+				<label for="coconut">Coconut</label>
+				<input type="checkbox" name="redvelvet" value="Red Velvet">
+				<label for="redvelvet">Red Velvet</label>
+				<input type="checkbox" name="cinnamon" value="Cinnamon">
+				<label for="cinnamon">Cinnamon</label>
+			</fieldset>
+			<fieldset name="flowers">
+				<legend>Flowers</legend>
+				<div>
+					<input type="checkbox" name="roses" value="Roses">
+					<label for="roses">Roses</label>
+				</div>
+				<div>
+					<input type="checkbox" name="daisies" value="Daisies">
+					<label for="daisies">Daisies</label>
+				</div>
+				<div>
+					<input type="checkbox" name="orchids" value="Orchids">
+					<label for="orchids">Orchids</label>
+				</div>
+				<div>
+					<input type="checkbox" name="carnations" value="Carnations">
+					<label for="carnations">Carnations</label>
+				</div>
+				<div>
+					<input type="checkbox" name="marigolds" value="Marigolds">
+					<label for="marigolds">Marigolds</label>
+				</div>
+			</fieldset>
+			<div>
+				<input type="checkbox" name="sprinkles" value="Sprinkles">
+				<label for="sprinkles">Sprinkles</label>
+			</div>
+			<div>
+				<input type="checkbox" name="delivery" value="Delivery">
+				<label for="delivery">Delivery</label>
+			</div>
+			<input type="submit" value="Submit">
+		</form>
 	</div>
-
-	<form action="">
-		<div class="number-field">
-			<label for="tiers">Tiers</label>
-			<input type="text" name="tiers" value="1">
-		</div>
-		<div class="number-field">
-			<label for="candles">Candles</label>
-			<input type="text" name="candles" value="0">
-		</div>
-		<fieldset name="flavors">
-			<legend>Flavors</legend>
-			<input type="checkbox" name="chocolate" value="10">
-			<label for="chocolate">Chocolate</label>
-			<input type="checkbox" name="vanilla" value="7">
-			<label for="vanilla">Vanilla</label>
-			<input type="checkbox" name="lemon" value="11">
-			<label for="lemon">Lemon</label>
-			<input type="checkbox" name="carrot" value="8">
-			<label for="carrot">Carrot</label>
-			<input type="checkbox" name="marble" value="12">
-			<label for="marble">Marble</label>
-			<input type="checkbox" name="coconut" value="15">
-			<label for="coconut">Coconut</label>
-			<input type="checkbox" name="redvelvet" value="14">
-			<label for="redvelvet">Red Velvet</label>
-			<input type="checkbox" name="cinnamon" value="10">
-			<label for="cinnamon">Cinnamon</label>
-			</div>
-		</fieldset>
-		<fieldset name="flowers">
-			<legend>Flowers</legend>
-			<div>
-				<input type="checkbox" name="roses" value="25">
-				<label for="roses">Roses</label>
-			</div>
-			<div>
-				<input type="checkbox" name="daisies" value="15">
-				<label for="daisies">Daisies</label>
-			</div>
-			<div>
-				<input type="checkbox" name="orchids" value="20">
-				<label for="orchids">Orchids</label>
-			</div>
-			<div>
-				<input type="checkbox" name="carnations" value="14">
-				<label for="carnations">Carnations</label>
-			</div>
-			<div>
-				<input type="checkbox" name="marigolds" value="16">
-				<label for="marigolds">Marigolds</label>
-			</div>
-		</fieldset>
-		<div>
-			<input type="checkbox" name="sprinkles" value="Sprinkles">
-			<label for="sprinkles">Sprinkles</label>
-		</div>
-		<div>
-			<input type="checkbox" name="delivery" value="Delivery">
-			<label for="delivery">Delivery</label>
-		</div>
-		<input type="hidden" name="tax" value="0.8">
-		<input type="submit" value="Submit">
-	</form>
 
 	<script src="decorator-pattern.js" type="text/javascript"></script>
 </body>
