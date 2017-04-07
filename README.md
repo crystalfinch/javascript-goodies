@@ -6,3 +6,4 @@ Examples of concepts &amp; patterns I know about :)
 * Closures
 * Decorator Pattern
 * Event Delegation
+* Prototype Pattern
