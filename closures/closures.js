@@ -5,9 +5,9 @@
 		var magicWord = "please";
 		function check(input) {
 			if (input === magicWord) {
-				updateMsg("success","Correct!");
+				updateMsg("ui message success","Correct!");
 			} else {
-				updateMsg("warning","Ah ah ah, you didn't say the magic word!"); // Jurassic Park! :D
+				updateMsg("ui message error","Ah ah ah, you didn't say the magic word!"); // Jurassic Park! :D
 			}
 		}
 		return check(input);
@@ -69,11 +69,11 @@
 	}
 
 	function handleDonutBtn(btn, callback) {
-		if(btn.className == "add") {
+		if(btn.id == "add") {
 			donuts.addCount(1);
-		} else if(btn.className == "subtract") {
+		} else if(btn.id == "subtract") {
 			donuts.subtractCount(1);
-		} else if(btn.className == "reset") {
+		} else if(btn.id == "reset") {
 			donuts.resetCount();
 		}
 		if (typeof callback === "function") {

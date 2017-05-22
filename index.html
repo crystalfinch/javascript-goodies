@@ -1,0 +1,951 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>JavaScript Goodies</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+	<link rel="stylesheet" href="lib/highlight/styles/atom-one-dark.css">
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<h1 class="ui center aligned header">JavaScript Goodies</h1>
+	<div class="ui divider hidden"></div>
+
+	<div id="classicalInheritance" class="ui segment">
+		<h1 class="ui header">Classical Inheritance</h1>
+		<div class="ui grid">
+			<div class="ui eight wide column">
+				<p>JavaScript doesn't have classes, but classes can be simulated.</p>
+				<div id="parent">
+					<strong>Superclass: </strong>
+				</div>
+				<div id="child">
+					<strong>Subclass: </strong>
+				</div>
+			</div>
+			<div class="ui sixteen wide column">
+				<div class="ui segment inverted no-fouc">
+					<div class="ui accordion">
+						<div class="active title">
+							<i class="code icon"></i>
+							Code
+						</div>
+						<div class="active content">
+<pre><code>{ // block scope is the new IIFE :)
+  // superclass
+  class Shape {
+    constructor() {
+      this.greeting = 'Hello';
+    }
+
+    // superclass method
+    greet() {
+      return `${this.greeting} from ${this.constructor.name}`;
+    }
+  }
+
+  // subclass
+  class Rectangle extends Shape {
+    constructor() {
+      super(); // call super constructor
+      this.greeting = 'Hey'; // can use 'this' because of super() call
+    }
+  }
+
+  const shp = new Shape();
+  const rect = new Rectangle();
+
+  const superClass = document.getElementById('parent');
+  superClass.innerHTML += shp.greet();
+
+  const subClass = document.getElementById('child');
+  subClass.innerHTML += rect.greet();
+}
+</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="closures" class="ui segment">
+		<h1 class="ui header">Closures</h1>
+		<div class="ui divider hidden"></div>
+		<div class="ui grid">
+			<div class="row">
+				<div class="ui eight wide column">
+					<h2 class="ui header">Data Privacy</h2>
+					<p>Enter the magic word and click the button. The script checks if the value is correct using a JavaScript closure.</p>
+					<h3 class="ui header">What&#39;s the magic word?</h3>
+					<form class="ui form">
+						<div class="fields">
+							<div class="eight wide field">
+								<input type="text" name="word" id="word">
+							</div>
+							<div class="four wide field">
+								<input type="submit" value="Check!" class="ui fluid button">
+							</div>
+						</div>
+					</form>
+					<div id="message"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="ui segment inverted no-fouc">
+			<div class="ui accordion">
+				<div class="active title">
+					<i class="code icon"></i>
+					Code
+				</div>
+				<div class="active content">
+<pre><code>(function() {
+  function password(input) {
+    var magicWord = "please";
+    function check(input) {
+      if (input === magicWord) {
+        updateMsg("ui message success","Correct!");
+      } else {
+        updateMsg("ui message error","Ah ah ah, you didn't say the magic word!"); // Jurassic Park! :D
+      }
+    }
+    return check(input);
+  }
+
+  var form = document.querySelector("form");
+  form.onsubmit = function(e) {
+    e.preventDefault();
+    var value = e.target[0].value;
+    password(value);
+  };
+
+  var msg = document.querySelector("#message");
+  function updateMsg(type, str) {
+    msg.className = type;
+    msg.innerHTML = str;
+  }
+})();</code></pre>
+				</div>
+			</div>
+		</div>
+
+		<div class="ui divider hidden"></div>
+		<div class="ui divider"></div>
+		<div class="ui divider hidden"></div>
+
+		<div class="ui grid">
+			<div class="row">
+				<div class="ui eight wide column">
+					<h2 class="ui header">Privileged Methods</h2>
+					<p>The first button lets you increase the number of donuts. The second lets you decrease the number of donuts. The third button resets the number to zero.</p>
+					<h3 class="ui center aligned header">How many donuts would you like?</h3>
+					<div id="order" class="ui center aligned basic segment">
+						<p><strong>Total:</strong> You would like <span class="total"></span> <span class="fa"></span></p>
+						<button type="button" class="ui mini button" id="add"><i class="plus icon"></i>Add</button>
+						<button type="button" class="ui mini button" id="subtract"><i class="minus icon"></i>Subtract</button>
+						<button type="button" class="ui mini button" id="reset"><i class="undo icon"></i>Reset</button>
+					</div>
+				</div>
+				<div class="ui sixteen wide column">
+					<div class="ui segment inverted no-fouc">
+						<div class="ui accordion">
+							<div class="active title">
+								<i class="code icon"></i>
+								Code
+							</div>
+							<div class="active content">
+<pre><code>(function() {
+  function counter() {
+    var count = 0;
+    return {
+      getCount: function() {
+        return count;
+      },
+      addCount: function(num) {
+        count += num;
+      },
+      subtractCount: function(num) {
+        if(count > 0) {
+          count -= num;
+        } else { // avoid negative number
+          count = 0;
+        }
+      },
+      resetCount: function() {
+        count = 0;
+      }
+    };
+  }
+
+  var donuts = counter();
+
+  function updateOrderMsg() {
+    var orderTotal = document.querySelector("#order .total");
+    var total = donuts.getCount();
+    var emoji = document.querySelector("#order .fa");
+    var descriptor = "donuts";
+    if(total === 0) {
+      emoji.className = "fa fa-frown-o"; // no donuts?!
+    } else if(total === 1) {
+      emoji.className = "fa fa-meh-o"; // just one? really?
+      descriptor = "donut";
+    } else if(total > 1) {
+      emoji.className = "fa fa-smile-o"; // now that's more like it!
+    }
+    orderTotal.innerHTML = total + " " + descriptor;
+  }
+
+  function handleDonutBtn(btn, callback) {
+    if(btn.id == "add") {
+      donuts.addCount(1);
+    } else if(btn.id == "subtract") {
+      donuts.subtractCount(1);
+    } else if(btn.id == "reset") {
+      donuts.resetCount();
+    }
+    if (typeof callback === "function") {
+      callback();
+    } else {
+      throw new TypeError("Callback passed to handleDonutBtn is not a function");
+    }
+  }
+
+  function delegate(id, evt, node, func, cb) {
+    var el = document.getElementById(id);
+    el.addEventListener(evt, function(event) {
+      var target = event.target;
+      if (target.nodeName == node) {
+        if (typeof cb == "function") {
+          func(target, cb);
+        } else {
+          func(target);
+        }
+      }
+    });
+  }
+
+  updateOrderMsg(); // initial message
+  delegate("order", "click", "BUTTON", handleDonutBtn, updateOrderMsg);
+})();</code></pre>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div id="decoratorPattern" class="ui segment">
+		<h1 class="ui header">Decorator Pattern</h1>
+		<p>Use the form to put together an order for a cake. The order total is calculated using JavaScript decorators.</p>
+
+		<div class="ui divider hidden"></div>
+
+		<div class="ui grid">
+			<div class="row">
+				<div class="ui eight wide column">
+					<div id="charges">
+						<i class="fa fa-birthday-cake"></i>
+						<table class="ui table">
+							<tbody>
+								<tr>
+									<td>
+										<div class="ui center aligned basic segment">
+											<em>Your order will be displayed here after you submit the form.</em>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="ui eight wide column">
+					<div class="ui segment basic padded">
+						<form id="cakeForm" class="ui form">
+							<div class="number-field two wide field">
+								<label for="tiers">Tiers</label>
+								<input type="text" name="tiers" value="1">
+							</div>
+							<div class="number-field two wide field">
+								<label for="candles">Candles</label>
+								<input type="text" name="candles" value="0">
+							</div>
+							<fieldset name="flavors" class="grouped fields">
+								<legend>Flavors</legend>
+								<div class="field">
+									<div class="ui checked checkbox">
+										<input type="checkbox" name="vanilla" value="Vanilla" checked>
+										<label for="vanilla">Vanilla</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="chocolate" value="Chocolate">
+										<label for="chocolate">Chocolate</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="lemon" value="Lemon">
+										<label for="lemon">Lemon</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="carrot" value="Carrot">
+										<label for="carrot">Carrot</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="marble" value="Marble">
+										<label for="marble">Marble</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="coconut" value="Coconut">
+										<label for="coconut">Coconut</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="redvelvet" value="Red Velvet">
+										<label for="redvelvet">Red Velvet</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="cinnamon" value="Cinnamon">
+										<label for="cinnamon">Cinnamon</label>
+									</div>
+								</div>
+							</fieldset>
+							<fieldset name="flowers" class="grouped fields">
+								<legend>Flowers</legend>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="roses" value="Roses">
+										<label for="roses">Roses</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="daisies" value="Daisies">
+										<label for="daisies">Daisies</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="orchids" value="Orchids">
+										<label for="orchids">Orchids</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="carnations" value="Carnations">
+										<label for="carnations">Carnations</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui checkbox">
+										<input type="checkbox" name="marigolds" value="Marigolds">
+										<label for="marigolds">Marigolds</label>
+									</div>
+								</div>
+							</fieldset>
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="sprinkles" value="Sprinkles">
+									<label for="sprinkles">Sprinkles</label>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="delivery" value="Delivery">
+									<label for="delivery">Delivery</label>
+								</div>
+							</div>
+							<input type="submit" value="Submit" class="ui button">
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="ui divider hidden"></div>
+
+		<div class="ui segment inverted no-fouc">
+			<div class="ui accordion">
+				<div class="active title">
+					<i class="code icon"></i>
+					Code
+				</div>
+				<div class="active content">
+<pre><code>(function() {
+  function Cake() { // constructor with defaults
+    this.prices = {
+      "tiers": 20,
+      "candles": 0.5,
+      "flavors": {
+        "Vanilla": 7,
+        "Chocolate": 10,
+        "Lemon": 11,
+        "Carrot": 8,
+        "Marble": 12,
+        "Coconut": 15,
+        "Red Velvet": 14,
+        "Cinnamon": 10
+      },
+      "flowers": {
+        "Roses": 25,
+        "Daisies": 15,
+        "Orchids": 20,
+        "Carnations": 14,
+        "Marigolds": 16
+      },
+      "sprinkles": 4,
+      "delivery": 20,
+      "stateTax": 0.0725, // California sales tax is currently 7.25%
+      "localTax": 0.085 // Santa Cruz sales tax is currently 8.5%
+    };
+    this.charges = {};
+    this.price = function() {
+      return 0;
+    };
+    this.tiers = function() {
+      return 1; // defaults to one tier
+    };
+    this.candles = function() {
+      return 0;
+    };
+    this.flavors = function() {
+      return ["Vanilla"];
+    };
+    this.flowers = function() {
+      return [];
+    };
+    this.sprinkles = function() {
+      return false;
+    };
+    this.delivery = function() {
+      return false;
+    };
+  }
+
+  function rounded(x) {
+    return Math.round(x * 100)/100;
+  }
+
+  function formatPrice(dollars) {
+    var str = "$" + dollars.toFixed(2);
+    return str;
+  }
+
+  function chosenItems(arg) {
+    var items = Array.prototype.slice.call(arg);
+    var chosenItems = items.filter(function(item) { // array of inputs
+      if (item.checked) {
+        return item;
+      }
+    });
+
+    var chosen = chosenItems.map(function(item) { // array of values from array of inputs
+      return item.value;
+    });
+    return chosen;
+  }
+
+  function Tiers(cake, num) {
+    var p = cake.price();
+    var tiersCost = rounded((cake.prices.tiers * num));
+    cake.tiers = function() {
+      return num;
+    };
+    cake.charges.tiers = tiersCost;
+    cake.price = function() {
+      return p + tiersCost;
+    };
+  }
+
+  function Candles(cake, num) {
+    var p = cake.price();
+    var candlesCost = rounded((cake.prices.candles * num));
+    cake.candles = function() {
+      return num;
+    };
+    cake.charges.candles = candlesCost;
+    cake.price = function() {
+      return p + candlesCost;
+    };
+  }
+
+  function Flavors(cake, flavors) {
+    var p = cake.price();
+    var flavorsCost = flavors.reduce(function(sum, flavor) {
+      return sum + cake.prices.flavors[flavor];
+    }, 0);
+    cake.flavors = function() {
+      return flavors;
+    };
+    cake.charges.flavors = flavorsCost;
+    cake.price = function() {
+      return p + flavorsCost;
+    };
+  }
+
+  function Flowers(cake, flowers) {
+    var p = cake.price();
+    var flowersCost = flowers.reduce(function(sum, flower) {
+      return sum + cake.prices.flowers[flower];
+    }, 0);
+    cake.flowers = function() {
+      return flowers;
+    };
+    cake.charges.flowers = flowersCost;
+    cake.price = function() {
+      return p + flowersCost;
+    };
+  }
+
+  function Sprinkles(cake) {
+    var p = cake.price();
+    var sprinklesCost = cake.prices.sprinkles;
+    cake.sprinkles = function() {
+      return true;
+    };
+    cake.charges.sprinkles = sprinklesCost;
+    cake.price = function() {
+      return p + sprinklesCost;
+    };
+  }
+
+  function Delivery(cake) {
+    var p = cake.price();
+    var deliveryCost = cake.prices.delivery;
+    cake.delivery = function() {
+      return true;
+    };
+    cake.charges.delivery = deliveryCost;
+    cake.price = function() {
+      return p + deliveryCost;
+    };
+  }
+
+  function StateTax(cake) {
+    var p = cake.price();
+    var tax = rounded((p * cake.prices.stateTax));
+    cake.charges.stateTax = tax;
+    cake.price = function() {
+      return rounded((p + tax));
+    };
+  }
+
+  function LocalTax(cake) {
+    var p = cake.price();
+    var tax = rounded((p * cake.prices.localTax));
+    cake.charges.localTax = tax;
+    cake.price = function() {
+      return rounded((p + tax));
+    };
+  }
+
+  var ck = new Cake(); // instance of the Cake constructor
+
+  function displayCharges(selector, cake) {
+    var table = document.querySelector(selector),
+        tiers = cake.tiers(),
+        candles = cake.candles(),
+        flavors = cake.flavors(),
+        flowers = cake.flowers(),
+        sprinkles = cake.sprinkles(),
+        delivery = cake.delivery(),
+        stateTax = cake.charges.stateTax,
+        localTax = cake.charges.localTax,
+        price = cake.price(),
+        template = '';
+
+    template += '&lt;thead&gt;' +
+      '&lt;tr&gt;' +
+        '&lt;th colspan="2" class="ui center aligned"&gt;Your Cake Order&lt;/th&gt;' +
+      '&lt;/tr&gt;' +
+      '&lt;tr&gt;' +
+        '&lt;th&gt;&lt;span&gt;Item&lt;/span&gt;&lt;/th&gt;' +
+        '&lt;th class="right aligned"&gt;&lt;span&gt;Price&lt;/span&gt;&lt;/th&gt;' +
+      '&lt;/tr&gt;' +
+    '&lt;/thead&gt;' +
+    '&lt;tbody&gt;';
+
+    template += '&lt;tr&gt;' +
+      '&lt;td&gt;Tiers &lt;span&gt;' + tiers +'&lt;/span&gt;&lt;/td&gt;' +
+      '&lt;td class="right aligned"&gt;' + formatPrice(cake.charges.tiers) + '&lt;/td&gt;' +
+    '&lt;/tr&gt;';
+
+    if (candles > 0) {
+      template += '&lt;tr&gt;' +
+        '&lt;td&gt;Candles&lt;span&gt;' + candles +'&lt;/span&gt;&lt;/td&gt;' +
+        '&lt;td class="right aligned"&gt;' + formatPrice(cake.charges.candles) + '&lt;/td&gt;' +
+      '&lt;/tr&gt;';
+    }
+
+    var flavorsString = flavors.join(", ");
+    template += '&lt;tr&gt;' +
+        '&lt;td&gt;' +
+          'Flavors' + '&lt;span&gt;' + flavorsString + '&lt;/span&gt;' +
+        '&lt;/td&gt;' +
+        '&lt;td class="right aligned"&gt;' +
+          formatPrice(cake.charges.flavors) +
+        '&lt;/td&gt;' +
+      '&lt;/tr&gt;';
+
+    if (flowers.length > 0) {
+      var flowersString = flowers.join(", ");
+      template += '&lt;tr&gt;' +
+        '&lt;td&gt;' +
+          'Flowers' + '&lt;span&gt;' + flowersString + '&lt;/span&gt;' +
+        '&lt;/td&gt;' +
+        '&lt;td class="right aligned"&gt;' +
+          formatPrice(cake.charges.flowers) +
+        '&lt;/td&gt;' +
+      '&lt;/tr&gt;';
+    }
+
+    if (sprinkles) {
+      template += '&lt;tr&gt;' +
+        '&lt;td&gt;Sprinkles&lt;/td&gt;' +
+        '&lt;td class="right aligned"&gt;' + formatPrice(cake.charges.sprinkles) +'&lt;/td&gt;' +
+      '&lt;/tr&gt;';
+    }
+
+    if (delivery) {
+      template += '&lt;tr&gt;' +
+        '&lt;td&gt;Delivery&lt;/td&gt;' +
+        '&lt;td class="right aligned"&gt;' + formatPrice(cake.charges.delivery) +'&lt;/td&gt;' +
+      '&lt;/tr&gt;';
+    }
+
+    template += '&lt;tr&gt;' +
+        '&lt;td&gt;State Tax &lt;span&gt;(' + rounded(cake.prices.stateTax) +'%)&lt;/span&gt;&lt;/td&gt;' +
+        '&lt;td class="right aligned"&gt;' + formatPrice(stateTax) + '&lt;/td&gt;' +
+      '&lt;/tr&gt;' +
+      '&lt;tr&gt;' +
+        '&lt;td&gt;Local Tax &lt;span&gt;(' + rounded(cake.prices.localTax) +'%)&lt;/span&gt;&lt;/td&gt;' +
+        '&lt;td class="right aligned"&gt;' + formatPrice(localTax) + '&lt;/td&gt;' +
+      '&lt;/tr&gt;' +
+      '&lt;tr class="last"&gt;' +
+        '&lt;td&gt;Total&lt;/td&gt;' +
+        '&lt;td class="right aligned"&gt;&lt;strong&gt;' + formatPrice(price) + '&lt;/strong&gt;&lt;/td&gt;' +
+      '&lt;/tr&gt;' +
+    '&lt;/tbody&gt;';
+
+    table.innerHTML = template;
+  }
+
+  function handleForm(e) {
+    var tiers = Number(e.target.tiers.value),
+        candles = Number(e.target.candles.value),
+        sprinkles = e.target.sprinkles.checked,
+        delivery = e.target.delivery.checked,
+        flavs = e.target.flavors.getElementsByTagName("input"),
+        chosenFlavs = chosenItems(flavs),
+        flwrs = e.target.flowers.getElementsByTagName("input"),
+        chosenFlwrs = chosenItems(flwrs);
+
+    if (tiers > 0) {
+      Tiers(ck, tiers);
+    }
+    if (candles > 0) {
+      Candles(ck, candles);
+    }
+    if (chosenFlavs.length) {
+      Flavors(ck, chosenFlavs);
+    } else {
+      Flavors(ck, ck.flavors()); // use default
+      e.target.flavors.elements.vanilla.checked = true; // check Vanilla
+    }
+    if (chosenFlwrs.length) {
+      Flowers(ck, chosenFlwrs);
+    }
+    if (sprinkles) {
+      Sprinkles(ck);
+    }
+    if (delivery) {
+      Delivery(ck);
+    }
+    StateTax(ck);
+    LocalTax(ck);
+
+    displayCharges("#charges table", ck);
+    ck = new Cake(); // reset so you can make new order without page refresh
+  }
+
+  var form = document.getElementById("cakeForm");
+  form.onsubmit = function(e) {
+    e.preventDefault();
+    handleForm(e);
+  };
+})();</code></pre>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div id="eventDelegation" class="ui segment">
+		<h1 class="ui header">Event Delegation</h1>
+
+		<div class="ui grid">
+			<div class="row">
+				<div class="ui six wide column">
+					<p>Clicking on either a link in the list or a cell in the table applies a "highlight" css class to it by means of JavaScript event delegation. Only 2 event listeners are used in the script instead of one for every link or cell.</p>
+				</div>
+			</div>
+
+			<div class="ui five wide column">
+				<h2 class="ui header">List</h2>
+				<ul id="beatles" class="ui bulleted list">
+					<li>
+						<a href="index.html" class="highlight">Paul</a>
+						<ul>
+							<li>
+								<a href="index.html">McCartney</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="index.html">John</a>
+						<ul>
+							<li>
+								<a href="index.html">Lennon</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="index.html">George</a>
+						<ul>
+							<li>
+								<a href="index.html">Harrison</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="index.html">Ringo</a>
+						<ul>
+							<li>
+								<a href="index.html">Starr</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+			<div class="ui eight wide column">
+				<h2 class="ui header">Table</h2>
+				<table id="shows" class="ui center aligned table">
+					<thead>
+						<tr>
+							<th colspan="3">TV Shows</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Last Week Tonight</td>
+							<td>America's Test Kitchen</td>
+							<td>Cosmos</td>
+						</tr>
+						<tr>
+							<td>The Mick</td>
+							<td>Rick &amp; Morty</td>
+							<td>Stranger Things</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="ui divider hidden"></div>
+
+		<div class="ui segment inverted no-fouc">
+			<div class="ui accordion">
+				<div class="active title">
+					<i class="code icon"></i>
+					Code
+				</div>
+				<div class="active content">
+<pre><code>(function() {
+  // cross-browser matches() support
+  function match(el, selector) {
+    var p = Element.prototype;
+    var f = p.matches || p.webkitMatchesSelector || p.mozMatchesSelector || p.msMatchesSelector;
+    return f.call(el, selector);
+  }
+
+  function highlightToggle(item) {
+    item.className = match(item, '.highlight') ? "" : "highlight";
+  }
+
+  function delegate(id, evt, node, func) {
+    var el = document.getElementById(id);
+    el.addEventListener(evt, function(event) {
+      var target = event.target;
+      if (target.nodeName == node) {
+        event.preventDefault();
+        func(target);
+      }
+    });
+  }
+
+  delegate("beatles", "click", "A", highlightToggle); // list version
+  delegate("shows", "click", "TD", highlightToggle); // table version
+})();</code></pre>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div id="prototypePattern" class="ui segment">
+		<h1 class="ui header">Prototype Pattern</h1>
+		<div class="ui divider hidden"></div>
+		<div class="ui grid">
+			<div class="row">
+				<div class="ui seven wide column">
+					<h2 class="ui header">Example: Views</h2>
+					<p>These French flashcards are generated using a view prototype that was defined once and then reused. The translation appears when you hover on the card. Click on the card to remove it.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div id="flashcards" class="ui sixteen wide column"></div>
+			</div>
+		</div>
+		<div class="ui segment inverted no-fouc">
+			<div class="ui accordion">
+				<div class="active title">
+					<i class="code icon"></i>
+					Code
+				</div>
+				<div class="active content">
+<pre><code>(function() {
+  var viewProto = {
+    init: function init(options) {
+      this.title = options.title;
+      this.content = options.content;
+      if (options.color) {
+        this.color = options.color;
+      }
+    },
+    getTemplate: function getTemplate() {
+      return (
+        '&lt;span class="trigger"&gt;&lt;/span&gt;' +
+          '&lt;dt&gt;' + this.title + '&lt;/dt&gt;' +
+        '&lt;dd&gt;' + this.content + '&lt;/dd&gt;'
+      );
+    },
+    render: function render(location) {
+      var node = document.createElement("dl");
+      node.classList = "ui card";
+      if (this.color) {
+        node.style.backgroundColor = this.color;
+      }
+      node.innerHTML = this.getTemplate();
+      location.appendChild(node);
+    }
+  };
+
+  var flashcards = document.getElementById("flashcards");
+  flashcards.addEventListener("click", function cardHandler(event) {
+    var target = event.target;
+    if (target.nodeName === "SPAN") { // the .trigger span
+      target.parentNode.remove();
+    }
+    if (!this.childNodes.length) { // no more cards!
+      this.removeEventListener("click", cardHandler); // listener no longer needed
+    }
+  });
+
+  function deal(deck) {
+    deck.forEach(function(element, index) {
+      var card = Object.create(viewProto);
+      card.init(element);
+      card.render(flashcards);
+    });
+  }
+
+  var colors = {
+    red: "#c53939",
+    blue: "#3d529e",
+    pink: "#d27fc0",
+    green: "#3d9e64",
+    orange: "#d69551"
+  };
+
+  var cardsArr = [
+    { title: "Bienvenue", content: "Welcome", color: colors.red },
+    { title: "Bonjour", content: "Hello", color: colors.blue },
+    { title: "L'Ordinateur", content: "Computer", color: colors.pink },
+    { title: "Au Revoir", content: "Goodbye", color: colors.green },
+    { title: "Bonsoir", content: "Goodnight", color: colors.orange },
+    { title: "Les Feuilles", content: "Leaves", color: colors.blue },
+    { title: "Choisir", content: "To choose", color: colors.green },
+    { title: "Le Cheveux", content: "Hair", color: colors.orange },
+    { title: "Le Papillon", content: "Butterfly", color: colors.red },
+    { title: "L'Argent", content: "Money", color: colors.pink }
+  ];
+
+  deal(cardsArr);
+})();</code></pre>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<noscript>
+		<style>
+			.no-fouc {
+				display: block;
+			}
+		</style>
+	</noscript>
+	<script
+	  src="https://code.jquery.com/jquery-3.2.1.min.js"
+	  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+	  crossorigin="anonymous"></script>
+	<script src="lib/highlight/highlight.pack.js"></script>
+	<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			// Semantic UI inits
+			$('.ui.accordion').accordion({
+				selector: {
+					trigger: '.title'
+				}
+			});
+			$('.ui.checkbox').checkbox({
+				onChecked: function() {
+					$(this).checkbox('check');
+				},
+				onUnchecked: function() {
+					$(this).checkbox('uncheck');
+				}
+			});
+			// Code Syntax Highlight
+			$('pre code').each(function(i, block) {
+				hljs.highlightBlock(block);
+			});
+			// FOUC!
+			$('.no-fouc').delay(2000).slideDown();
+		});
+	</script>
+	<script src="classical-inheritance/classical-inheritance.js" type="text/javascript"></script>
+	<script src="closures/closures.js" type="text/javascript"></script>
+	<script src="decorator-pattern/decorator-pattern.js" type="text/javascript"></script>
+	<script src="event-delegation/event-delegation.js" type="text/javascript"></script>
+	<script src="prototype-pattern/prototype-pattern.js" type="text/javascript"></script>
+</body>
+</html>

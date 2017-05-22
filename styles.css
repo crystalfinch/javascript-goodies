@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600');
+
+body {
+	background-color: #efefef;
+	height: auto;
+	padding: 40px;
+	-webkit-font-smoothing: antialiased;
+}
+
+body,
+h1, h2, h3, h4, h5 {
+	font-family: 'Open Sans', sans-serif;
+}
+
+.no-fouc {
+	display: none;
+}
+
+.ui.header {
+	font-weight: 300;
+}
+
+.ui.segment {
+	box-shadow: none;
+}
+
+body >.ui.segment {
+	margin-bottom: 50px;
+}
+
+.ui.segment:not(.inverted) {
+	border-color: transparent;
+	padding: 30px;
+}
+
+.ui.segment.inverted {
+	background-color: #282c34;
+	padding: 8px 16px;
+}
+
+.ui.segment.inverted .title {
+	color: #fff;
+	font-weight: 600;
+}
+
+.ui.message.success {
+	background-color: #69bd67;
+	box-shadow: 0 0 0 1px #69bd67 inset, 0 0 0 0 transparent;
+	color: #fff;
+	font-weight: 600;
+}
+.ui.message.error {
+	background-color: #e63e3d;
+	box-shadow: 0 0 0 1px #e63e3d inset, 0 0 0 0 transparent;
+	color: #fff;
+	font-weight: 600;
+}
+
+/* Closures */
+#closures .fa {
+	display: block;
+	font-size: 50px;
+	line-height: 70px;
+}
+#closures .fa.fa-smile-o {
+	color: #5bc359;
+}
+#closures .fa.fa-meh-o {
+	color: #caa492;
+}
+#closures .fa.fa-frown-o {
+	color: #d25e5e;
+}
+
+/* Decorator Pattern */
+
+#decoratorPattern .fa {
+	color: #e06797;
+	display: block;
+	font-size: 50px;
+	line-height: 70px;
+	margin: 0 auto 10px;
+	text-align: center;
+}
+
+#decoratorPattern .ui.checkbox.checked label:after {
+	font-family: FontAwesome;
+    content: "\f00c";
+}
+
+#decoratorPattern table tbody span {
+	color: #777;
+	display: block;
+	font-size: .7em;
+	font-weight: normal;
+}
+#decoratorPattern table td em {
+	color: #777;
+}
+
+#decoratorPattern table thead th,
+#decoratorPattern table tr.last td,
+#decoratorPattern .ui.segment.padded {
+	background-color: #f1f1f1;
+}
+
+#decoratorPattern table thead th span {
+	font-size: .8em;
+	text-transform: uppercase;
+}
+
+#decoratorPattern form fieldset {
+	border: 1px solid #ddd;
+	float: left;
+	margin: 20px 0;
+	width: 140px;
+}
+#decoratorPattern form fieldset + fieldset {
+	clear: right;
+	margin-left: 20px;
+}
+
+/* Event Delegation */
+
+#eventDelegation .highlight {
+	background-color: #f7be56;
+}
+#eventDelegation td {
+	padding: 30px 20px;
+}
+#eventDelegation td:hover {
+	cursor: pointer;
+}
+
+/* Prototype Pattern */
+
+#prototypePattern .card {
+	background-color: #555;
+	box-shadow: none;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	color: #fff;
+	float: left;
+	height: 180px;
+	line-height: 1.4em;
+	margin: 10px;
+	padding: 20px;
+	position: relative;
+	width: 200px;
+}
+
+#prototypePattern .card:hover {
+	cursor: pointer;
+}
+
+#prototypePattern .card .trigger {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1;
+}
+#prototypePattern .card dt {
+	font-weight: bold;
+	margin-bottom: .25em;
+}
+#prototypePattern .card dd {
+	font-size: .9em;
+	margin: 0;
+	opacity: 0;
+	-webkit-transition: opacity .5s ease-out;
+	-moz-transition: opacity .5s ease-out;
+	-o-transition: opacity .5s ease-out;
+	transition: opacity .5s ease-out;
+}
+#prototypePattern .card:hover dd {
+	opacity: 1;
+}

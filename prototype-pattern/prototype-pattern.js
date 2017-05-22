@@ -7,6 +7,7 @@
 				this.color = options.color;
 			}
 		},
+		/* TODO: Update to use handlebars.js for template */
 		getTemplate: function getTemplate() {
 			return (
 				'<span class="trigger"></span>' +
@@ -16,7 +17,7 @@
 		},
 		render: function render(location) {
 			var node = document.createElement("dl");
-			node.classList = "card";
+			node.classList = "ui card";
 			if (this.color) {
 				node.style.backgroundColor = this.color;
 			}
