@@ -1,4 +1,4 @@
-# JavaScript Goodies!
+### JavaScript Goodies!
 
 * Classical Inheritance
 * Closures
